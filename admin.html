@@ -385,10 +385,94 @@
 
     .detail-val { font-size: 14px; color: var(--text); flex: 1; line-height: 1.7; }
 
+    /* ===== VISITS PAGE ===== */
+    .visits-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .visit-big-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 30px 28px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .visit-big-icon {
+      width: 64px; height: 64px;
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 30px; flex-shrink: 0;
+    }
+
+    .visit-big-icon.blue  { background: rgba(26,58,107,.1); }
+    .visit-big-icon.green { background: rgba(26,122,74,.1); }
+
+    .visit-big-num { font-size: 42px; font-weight: 900; color: var(--text); line-height: 1; }
+    .visit-big-lbl { font-size: 15px; color: var(--muted); margin-top: 4px; }
+
+    .visits-chart-wrap {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .chart-title {
+      font-size: 15px; font-weight: 700; color: var(--primary);
+      margin-bottom: 20px;
+    }
+
+    .bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 140px; }
+
+    .bar-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      height: 100%;
+      justify-content: flex-end;
+    }
+
+    .bar-fill {
+      width: 100%;
+      background: linear-gradient(180deg, var(--primary), #2856a3);
+      border-radius: 6px 6px 0 0;
+      min-height: 4px;
+      transition: height .4s ease;
+      position: relative;
+    }
+
+    .bar-fill:hover::after {
+      content: attr(data-val);
+      position: absolute;
+      top: -26px; left: 50%; transform: translateX(-50%);
+      background: var(--text); color: #fff;
+      font-size: 11px; padding: 2px 6px; border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .bar-date {
+      font-size: 10px; color: var(--muted); text-align: center;
+      transform: rotate(-35deg);
+      white-space: nowrap; margin-top: 4px;
+    }
+
+    .bar-val { font-size: 11px; color: var(--text); font-weight: 700; }
+
     @media (max-width: 900px) {
       .sidebar { width: 200px; }
       .main { margin-right: 200px; padding: 20px; }
       .stats-grid { grid-template-columns: 1fr 1fr; }
+      .visits-stats { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
@@ -414,8 +498,11 @@
       <img src="logo.png" alt="عبيدو" />
       <p>لوحة الأدمين</p>
     </div>
-    <button class="nav-item active" onclick="showPage('submissions')">
+    <button class="nav-item active" id="navSubmissions" onclick="showPage('submissions')">
       <span class="icon">📋</span> الطلبات الواردة
+    </button>
+    <button class="nav-item" id="navVisits" onclick="showPage('visits')">
+      <span class="icon">👁</span> زوار الموقع
     </button>
     <button class="nav-item logout-btn" onclick="doLogout()">
       <span class="icon">🚪</span> تسجيل خروج
@@ -485,6 +572,42 @@
       </div>
     </div>
   </main>
+
+  <!-- ===== VISITS PAGE ===== -->
+  <main class="main" id="visitsPage" style="display:none">
+    <div class="topbar">
+      <div>
+        <div class="page-title">زوار الموقع</div>
+        <div class="page-sub" id="visitsLastUpdate">—</div>
+      </div>
+      <button class="refresh-btn" onclick="loadVisits()">🔄 تحديث</button>
+    </div>
+
+    <div class="visits-stats">
+      <div class="visit-big-card">
+        <div class="visit-big-icon blue">👁</div>
+        <div>
+          <div class="visit-big-num" id="visitTotal">—</div>
+          <div class="visit-big-lbl">إجمالي الزيارات</div>
+        </div>
+      </div>
+      <div class="visit-big-card">
+        <div class="visit-big-icon green">📅</div>
+        <div>
+          <div class="visit-big-num" id="visitToday">—</div>
+          <div class="visit-big-lbl">زيارات اليوم</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="visits-chart-wrap">
+      <div class="chart-title">📊 الزيارات اليومية (آخر 14 يوم)</div>
+      <div class="bar-chart" id="barChart">
+        <div style="color:var(--muted);font-size:13px;margin:auto">جاري التحميل...</div>
+      </div>
+    </div>
+  </main>
+
 </div>
 
 <!-- ===== MODAL ===== -->
@@ -502,6 +625,16 @@
   let allData = [];
   let currentFilter = 'all';
   let adminToken = '';
+  let currentPage = 'submissions';
+
+  function showPage(page) {
+    currentPage = page;
+    document.querySelector('.main').style.display  = page === 'submissions' ? 'block' : 'none';
+    document.getElementById('visitsPage').style.display = page === 'visits' ? 'block' : 'none';
+    document.getElementById('navSubmissions').classList.toggle('active', page === 'submissions');
+    document.getElementById('navVisits').classList.toggle('active', page === 'visits');
+    if (page === 'visits') loadVisits();
+  }
 
   // ===== LOGIN =====
   async function doLogin() {
@@ -643,8 +776,45 @@
     document.getElementById('modalOverlay').classList.remove('open');
   }
 
+  // ===== VISITS =====
+  async function loadVisits() {
+    try {
+      const res  = await fetch('/api/admin/visits');
+      const data = await res.json();
+      document.getElementById('visitTotal').textContent = data.total.toLocaleString('ar-EG');
+      document.getElementById('visitToday').textContent = data.today.toLocaleString('ar-EG');
+      document.getElementById('visitsLastUpdate').textContent =
+        'آخر تحديث: ' + new Date().toLocaleTimeString('ar-EG');
+      renderBarChart(data.byDay);
+    } catch {
+      alert('تعذر تحميل بيانات الزوار');
+    }
+  }
+
+  function renderBarChart(byDay) {
+    const chart = document.getElementById('barChart');
+    if (!byDay || byDay.length === 0) {
+      chart.innerHTML = '<div style="color:var(--muted);font-size:13px;margin:auto">لا توجد بيانات بعد</div>';
+      return;
+    }
+    const max = Math.max(...byDay.map(d => d.count), 1);
+    chart.innerHTML = byDay.map(d => {
+      const pct = Math.round((d.count / max) * 120);
+      return `
+        <div class="bar-col">
+          <div class="bar-val">${d.count}</div>
+          <div class="bar-fill" style="height:${pct}px" data-val="${d.count}"></div>
+          <div class="bar-date">${d.date}</div>
+        </div>`;
+    }).join('');
+  }
+
   // تحديث تلقائي كل 30 ثانية
-  setInterval(() => { if (adminToken) loadSubmissions(); }, 30000);
+  setInterval(() => {
+    if (!adminToken) return;
+    if (currentPage === 'submissions') loadSubmissions();
+    else loadVisits();
+  }, 30000);
 </script>
 
 </body>

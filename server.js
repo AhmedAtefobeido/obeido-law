@@ -7,7 +7,8 @@ const QRCode = require('qrcode');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const DATA_FILE = path.join(__dirname, 'data', 'submissions.json');
+const DATA_FILE   = path.join(__dirname, 'data', 'submissions.json');
+const VISITS_FILE = path.join(__dirname, 'data', 'visits.json');
 const ADMIN_PASSWORD = 'obeido2026'; // غيّر الباسورد من هنا
 
 app.use(cors());
@@ -18,9 +19,8 @@ app.use(express.static(__dirname));
 if (!fs.existsSync(path.join(__dirname, 'data'))) {
   fs.mkdirSync(path.join(__dirname, 'data'));
 }
-if (!fs.existsSync(DATA_FILE)) {
-  fs.writeFileSync(DATA_FILE, JSON.stringify([]));
-}
+if (!fs.existsSync(DATA_FILE))   fs.writeFileSync(DATA_FILE,   JSON.stringify([]));
+if (!fs.existsSync(VISITS_FILE)) fs.writeFileSync(VISITS_FILE, JSON.stringify([]));
 
 function readData() {
   return JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
@@ -29,6 +29,35 @@ function readData() {
 function writeData(data) {
   fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
 }
+
+function readVisits()      { return JSON.parse(fs.readFileSync(VISITS_FILE, 'utf8')); }
+function writeVisits(data) { fs.writeFileSync(VISITS_FILE, JSON.stringify(data, null, 2)); }
+
+// تسجيل زيارة الصفحة
+app.post('/api/track-visit', (req, res) => {
+  const opts = { timeZone: 'Africa/Cairo' };
+  const visits = readVisits();
+  visits.push({
+    ts:   Date.now(),
+    date: new Date().toLocaleDateString('ar-EG', opts),
+    time: new Date().toLocaleTimeString('ar-EG', opts),
+  });
+  writeVisits(visits);
+  res.json({ ok: true });
+});
+
+// إحصائيات الزوار للأدمين
+app.get('/api/admin/visits', (req, res) => {
+  const visits  = readVisits();
+  const todayStr = new Date().toLocaleDateString('ar-EG', { timeZone: 'Africa/Cairo' });
+  const today   = visits.filter(v => v.date === todayStr).length;
+
+  const map = {};
+  visits.forEach(v => { map[v.date] = (map[v.date] || 0) + 1; });
+  const byDay = Object.entries(map).slice(-14).map(([date, count]) => ({ date, count }));
+
+  res.json({ total: visits.length, today, byDay });
+});
 
 // تسجيل دخول الأدمين
 app.post('/api/admin/login', (req, res) => {

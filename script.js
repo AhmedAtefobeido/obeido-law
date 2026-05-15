@@ -118,6 +118,9 @@ window.addEventListener('load', () => {
   if (preloader) setTimeout(() => preloader.classList.add('hide'), 700);
 });
 
+// Track visit (fire & forget)
+fetch('/api/track-visit', { method: 'POST' }).catch(() => {});
+
 // Exit intent modal
 const exitModal  = document.getElementById('exitModal');
 const exitClose  = document.getElementById('exitModalClose');
