@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>لوحة الأدمين — مؤسسة عبيدو</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #1a3a6b;
+      --primary-light: #2856a3;
+      --gold: #c9a227;
+      --gold-light: #f0c040;
+      --bg: #f0f4f9;
+      --white: #fff;
+      --text: #1a1a2e;
+      --muted: #5a6480;
+      --border: #dde3ed;
+      --green: #1a7a4a;
+      --red: #c0392b;
+      --orange: #d68000;
+      --radius: 14px;
+      --shadow: 0 4px 20px rgba(26,58,107,.10);
+    }
+
+    body { font-family: 'Cairo', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* ===== LOGIN ===== */
+    .login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0f2244, #1a3a6b);
+    }
+
+    .login-box {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,.3);
+    }
+
+    .login-logo { font-size: 56px; margin-bottom: 12px; }
+    .login-title { font-size: 22px; font-weight: 800; color: var(--primary); margin-bottom: 6px; }
+    .login-sub { font-size: 13px; color: var(--muted); margin-bottom: 32px; }
+
+    .login-box input {
+      width: 100%;
+      padding: 14px 18px;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 15px;
+      text-align: center;
+      margin-bottom: 16px;
+      outline: none;
+      transition: .3s;
+      direction: ltr;
+    }
+
+    .login-box input:focus { border-color: var(--primary); }
+
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      border-radius: 10px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .3s;
+    }
+
+    .login-btn:hover { background: var(--primary-light); }
+    .login-error { color: var(--red); font-size: 13px; margin-top: 12px; display: none; }
+
+    /* ===== DASHBOARD ===== */
+    .dashboard { display: none; min-height: 100vh; }
+
+    .sidebar {
+      position: fixed;
+      top: 0; right: 0;
+      width: 240px;
+      height: 100vh;
+      background: linear-gradient(180deg, #0f2244, #1a3a6b);
+      padding: 28px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 10;
+    }
+
+    .sidebar-logo {
+      text-align: center;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      margin-bottom: 16px;
+    }
+
+    .sidebar-logo img { width: 80px; height: 80px; object-fit: contain; margin: 0 auto 8px; display: block; }
+    .sidebar-logo p { color: rgba(255,255,255,.7); font-size: 12px; }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      color: rgba(255,255,255,.75);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: .2s;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: right;
+    }
+
+    .nav-item:hover, .nav-item.active {
+      background: rgba(255,255,255,.12);
+      color: var(--white);
+    }
+
+    .nav-item .icon { font-size: 18px; }
+
+    .logout-btn {
+      margin-top: auto;
+      background: rgba(192,57,43,.15);
+      color: #ff8a80;
+    }
+
+    .logout-btn:hover { background: rgba(192,57,43,.3); }
+
+    .main {
+      margin-right: 240px;
+      padding: 32px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+
+    .page-title { font-size: 22px; font-weight: 800; color: var(--primary); }
+    .page-sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+    .refresh-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      border-radius: 10px;
+      padding: 10px 20px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .refresh-btn:hover { background: var(--primary-light); }
+
+    /* ===== STATS ===== */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .stat-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .stat-icon.blue  { background: rgba(26,58,107,.1); }
+    .stat-icon.green { background: rgba(26,122,74,.1); }
+    .stat-icon.gold  { background: rgba(201,162,39,.1); }
+    .stat-icon.red   { background: rgba(192,57,43,.1); }
+
+    .stat-num { font-size: 28px; font-weight: 900; color: var(--text); line-height: 1; }
+    .stat-lbl { font-size: 13px; color: var(--muted); margin-top: 3px; }
+
+    /* ===== FILTERS ===== */
+    .filters {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 8px 18px;
+      border-radius: 50px;
+      border: 2px solid var(--border);
+      background: var(--white);
+      font-family: 'Cairo', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: .2s;
+      color: var(--muted);
+    }
+
+    .filter-btn.active, .filter-btn:hover {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: var(--white);
+    }
+
+    .search-box {
+      margin-right: auto;
+      position: relative;
+    }
+
+    .search-box input {
+      padding: 9px 16px 9px 36px;
+      border: 2px solid var(--border);
+      border-radius: 50px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 13px;
+      outline: none;
+      transition: .2s;
+      width: 220px;
+    }
+
+    .search-box input:focus { border-color: var(--primary); }
+    .search-box::before { content: '🔍'; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 14px; }
+
+    /* ===== TABLE ===== */
+    .table-wrap {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    table { width: 100%; border-collapse: collapse; }
+
+    thead { background: #f5f7fc; }
+    th {
+      padding: 14px 16px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      text-align: right;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 14px 16px;
+      font-size: 13px;
+      color: var(--text);
+      border-bottom: 1px solid #f0f2f7;
+      vertical-align: middle;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f8f9fc; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 12px;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .badge-new     { background: rgba(26,58,107,.1);  color: var(--primary); }
+    .badge-inprog  { background: rgba(201,162,39,.12); color: #9a7200; }
+    .badge-done    { background: rgba(26,122,74,.1);   color: var(--green); }
+
+    .actions { display: flex; gap: 6px; align-items: center; }
+
+    .act-btn {
+      border: none;
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .act-inprog { background: rgba(201,162,39,.12); color: #9a7200; }
+    .act-inprog:hover { background: rgba(201,162,39,.25); }
+    .act-done   { background: rgba(26,122,74,.1);   color: var(--green); }
+    .act-done:hover { background: rgba(26,122,74,.2); }
+    .act-del    { background: rgba(192,57,43,.08);  color: var(--red); }
+    .act-del:hover { background: rgba(192,57,43,.18); }
+
+    .empty-state {
+      text-align: center;
+      padding: 64px 24px;
+      color: var(--muted);
+    }
+
+    .empty-state .empty-icon { font-size: 56px; margin-bottom: 12px; }
+    .empty-state p { font-size: 15px; }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.5);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      display: none;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 32px;
+      width: 100%;
+      max-width: 520px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,.2);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .modal-title { font-size: 18px; font-weight: 800; color: var(--primary); }
+    .modal-close { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--muted); }
+
+    .detail-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 14px;
+      align-items: flex-start;
+    }
+
+    .detail-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      width: 90px;
+      flex-shrink: 0;
+      padding-top: 2px;
+    }
+
+    .detail-val { font-size: 14px; color: var(--text); flex: 1; line-height: 1.7; }
+
+    @media (max-width: 900px) {
+      .sidebar { width: 200px; }
+      .main { margin-right: 200px; padding: 20px; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== LOGIN ===== -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">⚖</div>
+    <div class="login-title">لوحة التحكم</div>
+    <div class="login-sub">مؤسسة عبيدو للمحاماة والاستشارات القانونية</div>
+    <input type="password" id="passwordInput" placeholder="كلمة المرور" />
+    <button class="login-btn" onclick="doLogin()">دخول</button>
+    <div class="login-error" id="loginError">❌ كلمة المرور غير صحيحة</div>
+  </div>
+</div>
+
+<!-- ===== DASHBOARD ===== -->
+<div class="dashboard" id="dashboard">
+
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <img src="logo.png" alt="عبيدو" />
+      <p>لوحة الأدمين</p>
+    </div>
+    <button class="nav-item active" onclick="showPage('submissions')">
+      <span class="icon">📋</span> الطلبات الواردة
+    </button>
+    <button class="nav-item logout-btn" onclick="doLogout()">
+      <span class="icon">🚪</span> تسجيل خروج
+    </button>
+  </nav>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <div class="page-title">الطلبات الواردة</div>
+        <div class="page-sub" id="lastUpdate">—</div>
+      </div>
+      <button class="refresh-btn" onclick="loadSubmissions()">🔄 تحديث</button>
+    </div>
+
+    <!-- الإحصائيات -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon blue">📥</div>
+        <div><div class="stat-num" id="statTotal">0</div><div class="stat-lbl">إجمالي الطلبات</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon gold">🆕</div>
+        <div><div class="stat-num" id="statNew">0</div><div class="stat-lbl">طلبات جديدة</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon blue">⚙️</div>
+        <div><div class="stat-num" id="statProg">0</div><div class="stat-lbl">قيد المعالجة</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon green">✅</div>
+        <div><div class="stat-num" id="statDone">0</div><div class="stat-lbl">تمت المعالجة</div></div>
+      </div>
+    </div>
+
+    <!-- الفلاتر -->
+    <div class="filters">
+      <button class="filter-btn active" onclick="setFilter('all', this)">الكل</button>
+      <button class="filter-btn" onclick="setFilter('جديد', this)">🆕 جديد</button>
+      <button class="filter-btn" onclick="setFilter('قيد المعالجة', this)">⚙️ قيد المعالجة</button>
+      <button class="filter-btn" onclick="setFilter('تمت المعالجة', this)">✅ تمت المعالجة</button>
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="ابحث بالاسم أو الهاتف..." oninput="renderTable()" />
+      </div>
+    </div>
+
+    <!-- الجدول -->
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>الاسم</th>
+            <th>الهاتف</th>
+            <th>البريد</th>
+            <th>الخدمة</th>
+            <th>التاريخ</th>
+            <th>الحالة</th>
+            <th>إجراءات</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+      <div class="empty-state" id="emptyState" style="display:none">
+        <div class="empty-icon">📭</div>
+        <p>لا توجد طلبات بعد</p>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ===== MODAL ===== -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modalBox">
+    <div class="modal-header">
+      <div class="modal-title">تفاصيل الطلب</div>
+      <button class="modal-close" onclick="closeModalDirect()">✕</button>
+    </div>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script>
+  let allData = [];
+  let currentFilter = 'all';
+  let adminToken = '';
+
+  // ===== LOGIN =====
+  async function doLogin() {
+    const pwd = document.getElementById('passwordInput').value;
+    try {
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pwd })
+      });
+      const data = await res.json();
+      if (data.success) {
+        adminToken = data.token;
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        loadSubmissions();
+      } else {
+        document.getElementById('loginError').style.display = 'block';
+      }
+    } catch {
+      document.getElementById('loginError').style.display = 'block';
+    }
+  }
+
+  document.getElementById('passwordInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doLogin();
+  });
+
+  function doLogout() {
+    adminToken = '';
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('passwordInput').value = '';
+  }
+
+  // ===== LOAD DATA =====
+  async function loadSubmissions() {
+    try {
+      const res = await fetch('/api/admin/submissions');
+      allData = await res.json();
+      updateStats();
+      renderTable();
+      document.getElementById('lastUpdate').textContent =
+        'آخر تحديث: ' + new Date().toLocaleTimeString('ar-EG');
+    } catch {
+      alert('تعذر الاتصال بالسيرفر');
+    }
+  }
+
+  function updateStats() {
+    document.getElementById('statTotal').textContent = allData.length;
+    document.getElementById('statNew').textContent  = allData.filter(s => s.status === 'جديد').length;
+    document.getElementById('statProg').textContent = allData.filter(s => s.status === 'قيد المعالجة').length;
+    document.getElementById('statDone').textContent = allData.filter(s => s.status === 'تمت المعالجة').length;
+  }
+
+  // ===== FILTER =====
+  function setFilter(f, btn) {
+    currentFilter = f;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderTable();
+  }
+
+  // ===== RENDER TABLE =====
+  function renderTable() {
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    let rows = allData.filter(s => {
+      const matchFilter = currentFilter === 'all' || s.status === currentFilter;
+      const matchSearch = !search ||
+        s.name.toLowerCase().includes(search) ||
+        s.phone.includes(search) ||
+        (s.email || '').toLowerCase().includes(search);
+      return matchFilter && matchSearch;
+    });
+
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '';
+    document.getElementById('emptyState').style.display = rows.length ? 'none' : 'block';
+
+    rows.forEach((s, i) => {
+      const badgeClass = s.status === 'جديد' ? 'badge-new' : s.status === 'قيد المعالجة' ? 'badge-inprog' : 'badge-done';
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td style="color:var(--muted);font-size:12px">${i + 1}</td>
+        <td><strong style="cursor:pointer;color:var(--primary)" onclick="showDetail(${s.id})">${s.name}</strong></td>
+        <td dir="ltr">${s.phone}</td>
+        <td style="color:var(--muted)">${s.email || '—'}</td>
+        <td><span style="font-size:12px">${s.service}</span></td>
+        <td style="color:var(--muted);font-size:12px;white-space:nowrap">${s.date}</td>
+        <td><span class="badge ${badgeClass}">${s.status}</span></td>
+        <td>
+          <div class="actions">
+            <button class="act-btn act-inprog" onclick="changeStatus(${s.id},'قيد المعالجة')">⚙️</button>
+            <button class="act-btn act-done"   onclick="changeStatus(${s.id},'تمت المعالجة')">✅</button>
+            <button class="act-btn act-del"    onclick="deleteEntry(${s.id})">🗑️</button>
+          </div>
+        </td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  // ===== ACTIONS =====
+  async function changeStatus(id, status) {
+    await fetch(`/api/admin/submissions/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status })
+    });
+    await loadSubmissions();
+  }
+
+  async function deleteEntry(id) {
+    if (!confirm('هل تريد حذف هذا الطلب؟')) return;
+    await fetch(`/api/admin/submissions/${id}`, { method: 'DELETE' });
+    await loadSubmissions();
+  }
+
+  // ===== MODAL =====
+  function showDetail(id) {
+    const s = allData.find(x => x.id === id);
+    if (!s) return;
+    document.getElementById('modalContent').innerHTML = `
+      <div class="detail-row"><span class="detail-label">الاسم</span><span class="detail-val">${s.name}</span></div>
+      <div class="detail-row"><span class="detail-label">الهاتف</span><span class="detail-val" dir="ltr">${s.phone}</span></div>
+      <div class="detail-row"><span class="detail-label">البريد</span><span class="detail-val">${s.email || '—'}</span></div>
+      <div class="detail-row"><span class="detail-label">الخدمة</span><span class="detail-val">${s.service}</span></div>
+      <div class="detail-row"><span class="detail-label">التاريخ</span><span class="detail-val">${s.date}</span></div>
+      <div class="detail-row"><span class="detail-label">الحالة</span><span class="detail-val">${s.status}</span></div>
+      <div class="detail-row"><span class="detail-label">الرسالة</span><span class="detail-val">${s.message || '—'}</span></div>`;
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+
+  function closeModal(e) {
+    if (e.target === document.getElementById('modalOverlay')) closeModalDirect();
+  }
+
+  function closeModalDirect() {
+    document.getElementById('modalOverlay').classList.remove('open');
+  }
+
+  // تحديث تلقائي كل 30 ثانية
+  setInterval(() => { if (adminToken) loadSubmissions(); }, 30000);
+</script>
+
+</body>
+</html>
