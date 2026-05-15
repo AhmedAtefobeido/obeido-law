@@ -70,38 +70,29 @@ animatedEls.forEach(el => observer.observe(el));
 const sections   = document.querySelectorAll('section[id]');
 const navAnchors = document.querySelectorAll('.nav-links a[href^="#"]');
 
-// Contact form
+// Contact form → WhatsApp redirect
 const form       = document.getElementById('contactForm');
 const successMsg = document.getElementById('formSuccess');
-form.addEventListener('submit', async e => {
+form.addEventListener('submit', e => {
   e.preventDefault();
-  const btn = form.querySelector('button[type="submit"]');
-  btn.textContent = 'جاري الإرسال...';
-  btn.disabled = true;
-  try {
-    const res = await fetch('/api/submit', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name:    document.getElementById('name').value,
-        phone:   document.getElementById('phone').value,
-        email:   document.getElementById('email').value,
-        service: document.getElementById('service').value,
-        message: document.getElementById('message').value,
-      })
-    });
-    const data = await res.json();
-    if (data.success) {
-      successMsg.classList.add('show');
-      form.reset();
-      setTimeout(() => successMsg.classList.remove('show'), 6000);
-    }
-  } catch {
-    alert('حدث خطأ، يرجى المحاولة مرة أخرى');
-  } finally {
-    btn.textContent = 'إرسال الطلب';
-    btn.disabled = false;
-  }
+  const name    = document.getElementById('name').value.trim();
+  const phone   = document.getElementById('phone').value.trim();
+  const email   = document.getElementById('email').value.trim();
+  const service = document.getElementById('service').value;
+  const message = document.getElementById('message').value.trim();
+
+  const text = [
+    `مرحباً، أنا ${name}`,
+    `📞 ${phone}`,
+    email   ? `✉️ ${email}` : '',
+    service ? `الخدمة المطلوبة: ${service}` : '',
+    message ? `الرسالة: ${message}` : '',
+  ].filter(Boolean).join('\n');
+
+  window.open(`https://wa.me/201111936275?text=${encodeURIComponent(text)}`, '_blank');
+  successMsg.classList.add('show');
+  form.reset();
+  setTimeout(() => successMsg.classList.remove('show'), 6000);
 });
 
 // Smooth scroll
