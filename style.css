@@ -363,9 +363,8 @@ ul { list-style: none; }
   width: 340px;
   height: 340px;
   object-fit: contain;
-  border-radius: 50%;
-  background: linear-gradient(145deg, #0a1830 0%, var(--primary) 60%, #1e4d8a 100%);
-  padding: 6px;
+  background: linear-gradient(145deg, #0a1830 0%, #1a3a6b 60%, #1e4d8a 100%);
+  border-radius: 12px;
   animation: float3d 4s ease-in-out infinite;
   filter:
     drop-shadow(0 0 30px rgba(201,162,39,.6))
