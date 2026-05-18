@@ -357,14 +357,23 @@ ul { list-style: none; }
   50%       { transform: scale(1.15); opacity: .6; }
 }
 
-.hero-logo-3d {
-  position: relative;
-  z-index: 1;
+.hero-logo-frame {
   width: 340px;
   height: 340px;
-  object-fit: contain;
+  border-radius: 50%;
   background: linear-gradient(145deg, #0a1830 0%, #1a3a6b 60%, #1e4d8a 100%);
-  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-logo-3d {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
   animation: float3d 4s ease-in-out infinite;
   filter:
     drop-shadow(0 0 30px rgba(201,162,39,.6))
