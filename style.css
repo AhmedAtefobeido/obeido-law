@@ -175,7 +175,7 @@ ul { list-style: none; }
   object-fit: cover;
   border-radius: 50%;
   background: #0f2040;
-  filter: saturate(1.4) brightness(1.1) contrast(1.05);
+  filter: saturate(1.35) brightness(1.12) contrast(1.08);
   transition: var(--transition);
 }
 
@@ -183,7 +183,7 @@ ul { list-style: none; }
   height: 110px;
   width: 110px;
   background: #0f2040;
-  filter: saturate(1.4) brightness(1.1) contrast(1.05);
+  filter: saturate(1.35) brightness(1.12) contrast(1.08);
 }
 
 .footer-logo-img {
@@ -363,7 +363,7 @@ ul { list-style: none; }
   height: 540px;
   object-fit: contain;
   border-radius: 50%;
-  filter: saturate(1.1) brightness(1.05) drop-shadow(0 0 20px rgba(201,162,39,.25));
+  filter: saturate(1.35) brightness(1.12) contrast(1.08) drop-shadow(0 0 25px rgba(201,162,39,.35));
   animation: float3d 4s ease-in-out infinite;
   transform-origin: center center;
 }
