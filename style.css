@@ -170,8 +170,8 @@ ul { list-style: none; }
 }
 
 .logo-img {
-  height: 120px;
-  width: 120px;
+  height: 160px;
+  width: 160px;
   object-fit: cover;
   border-radius: 50%;
   border: 2px solid rgba(201,162,39,.7);
@@ -181,8 +181,8 @@ ul { list-style: none; }
 }
 
 .navbar.scrolled .logo-img {
-  height: 85px;
-  width: 85px;
+  height: 110px;
+  width: 110px;
   border-color: rgba(201,162,39,.5);
   filter: saturate(1.4) brightness(1.1) contrast(1.05);
 }
@@ -360,8 +360,8 @@ ul { list-style: none; }
 .hero-logo-3d {
   position: relative;
   z-index: 1;
-  width: 460px;
-  height: 460px;
+  width: 540px;
+  height: 540px;
   object-fit: contain;
   border-radius: 50%;
   filter: saturate(1.5) brightness(1.15) contrast(1.1) drop-shadow(0 0 30px rgba(201,162,39,.5));
