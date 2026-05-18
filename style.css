@@ -364,11 +364,6 @@ ul { list-style: none; }
   height: 420px;
   object-fit: contain;
   border-radius: 50%;
-  border: 3px solid rgba(201,162,39,.6);
-  box-shadow:
-    0 0 0 8px rgba(201,162,39,.12),
-    0 0 60px rgba(201,162,39,.3),
-    0 20px 60px rgba(0,0,0,.5);
   animation: float3d 4s ease-in-out infinite;
   transform-origin: center center;
 }
