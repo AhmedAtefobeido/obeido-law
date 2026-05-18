@@ -171,14 +171,19 @@ ul { list-style: none; }
 
 .logo-img {
   height: 80px;
-  width: auto;
+  width: 80px;
   object-fit: contain;
+  border-radius: 50%;
+  background: var(--primary);
+  padding: 4px;
   filter: drop-shadow(0 2px 10px rgba(0,0,0,.4));
   transition: var(--transition);
 }
 
 .navbar.scrolled .logo-img {
   height: 64px;
+  width: 64px;
+  background: var(--primary);
   filter: none;
 }
 
