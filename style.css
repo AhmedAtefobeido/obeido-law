@@ -170,8 +170,8 @@ ul { list-style: none; }
 }
 
 .logo-img {
-  height: 80px;
-  width: 80px;
+  height: 110px;
+  width: 110px;
   object-fit: contain;
   border-radius: 50%;
   background: var(--primary);
@@ -181,8 +181,8 @@ ul { list-style: none; }
 }
 
 .navbar.scrolled .logo-img {
-  height: 64px;
-  width: 64px;
+  height: 80px;
+  width: 80px;
   background: var(--primary);
   filter: none;
 }
