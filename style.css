@@ -174,6 +174,7 @@ ul { list-style: none; }
   width: 160px;
   object-fit: cover;
   border-radius: 50%;
+  background: #0f2040;
   filter: saturate(1.4) brightness(1.1) contrast(1.05);
   transition: var(--transition);
 }
@@ -181,7 +182,7 @@ ul { list-style: none; }
 .navbar.scrolled .logo-img {
   height: 110px;
   width: 110px;
-  background: #fff;
+  background: #0f2040;
   filter: saturate(1.4) brightness(1.1) contrast(1.05);
 }
 
