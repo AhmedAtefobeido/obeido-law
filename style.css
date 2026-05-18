@@ -363,7 +363,10 @@ ul { list-style: none; }
   height: 540px;
   object-fit: contain;
   border-radius: 50%;
-  filter: saturate(1.8) brightness(1.2) contrast(1.15) drop-shadow(0 0 30px rgba(201,162,39,.5));
+  filter:
+    drop-shadow(0 0 30px rgba(201,162,39,.6))
+    drop-shadow(0 20px 60px rgba(0,0,0,.5))
+    drop-shadow(0 -4px 20px rgba(201,162,39,.2));
   animation: float3d 4s ease-in-out infinite;
   transform-origin: center center;
 }
