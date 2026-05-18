@@ -174,8 +174,6 @@ ul { list-style: none; }
   width: 160px;
   object-fit: cover;
   border-radius: 50%;
-  border: 2px solid rgba(201,162,39,.7);
-  box-shadow: 0 0 16px rgba(201,162,39,.3), 0 4px 16px rgba(0,0,0,.4);
   filter: saturate(1.4) brightness(1.1) contrast(1.05);
   transition: var(--transition);
 }
@@ -183,7 +181,7 @@ ul { list-style: none; }
 .navbar.scrolled .logo-img {
   height: 110px;
   width: 110px;
-  border-color: rgba(201,162,39,.5);
+  background: #fff;
   filter: saturate(1.4) brightness(1.1) contrast(1.05);
 }
 
