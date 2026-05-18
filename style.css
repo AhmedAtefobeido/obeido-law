@@ -170,20 +170,20 @@ ul { list-style: none; }
 }
 
 .logo-img {
-  height: 110px;
-  width: 110px;
+  height: 130px;
+  width: 130px;
   object-fit: contain;
   border-radius: 50%;
-  background: var(--primary);
-  padding: 4px;
+  background: linear-gradient(145deg, #0a1830, #1a3a6b);
+  padding: 5px;
   filter: drop-shadow(0 2px 10px rgba(0,0,0,.4));
   transition: var(--transition);
 }
 
 .navbar.scrolled .logo-img {
-  height: 80px;
-  width: 80px;
-  background: var(--primary);
+  height: 90px;
+  width: 90px;
+  background: linear-gradient(145deg, #0a1830, #1a3a6b);
   filter: none;
 }
 
@@ -360,8 +360,8 @@ ul { list-style: none; }
 .hero-logo-3d {
   position: relative;
   z-index: 1;
-  width: 420px;
-  height: 420px;
+  width: 480px;
+  height: 480px;
   object-fit: contain;
   border-radius: 50%;
   animation: float3d 4s ease-in-out infinite;
@@ -1259,6 +1259,9 @@ ul { list-style: none; }
   width: 52px;
   height: 52px;
   object-fit: contain;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #0a1830, #1a3a6b);
+  padding: 3px;
   flex-shrink: 0;
 }
 
@@ -1844,6 +1847,9 @@ ul { list-style: none; }
   width: 88px;
   height: 88px;
   object-fit: contain;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #0a1830, #1a3a6b);
+  padding: 4px;
   margin: 0 auto 16px;
   filter: drop-shadow(0 4px 16px rgba(201,162,39,.35));
 }
@@ -2208,7 +2214,7 @@ ul { list-style: none; }
   justify-content: center;
 }
 
-.wa-chat-avatar img { width: 38px; height: 38px; object-fit: contain; }
+.wa-chat-avatar img { width: 38px; height: 38px; object-fit: contain; border-radius: 50%; background: linear-gradient(145deg, #0a1830, #1a3a6b); padding: 2px; }
 
 .wa-chat-info { flex: 1; }
 
