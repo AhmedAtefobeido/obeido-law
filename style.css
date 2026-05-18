@@ -364,6 +364,7 @@ ul { list-style: none; }
   object-fit: contain;
   border-radius: 50%;
   filter:
+    saturate(1.6) brightness(1.15) contrast(1.1)
     drop-shadow(0 0 30px rgba(201,162,39,.6))
     drop-shadow(0 20px 60px rgba(0,0,0,.5))
     drop-shadow(0 -4px 20px rgba(201,162,39,.2));
