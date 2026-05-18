@@ -363,7 +363,7 @@ ul { list-style: none; }
   height: 540px;
   object-fit: contain;
   border-radius: 50%;
-  filter: saturate(1.5) brightness(1.15) contrast(1.1) drop-shadow(0 0 30px rgba(201,162,39,.5));
+  filter: saturate(1.1) brightness(1.05) drop-shadow(0 0 20px rgba(201,162,39,.25));
   animation: float3d 4s ease-in-out infinite;
   transform-origin: center center;
 }
